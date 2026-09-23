@@ -5,6 +5,18 @@ proportional to that size, using a worst-case input where relevant
 so the measured time reflects the algorithm's real complexity.
 """
 from data_structures import Stack, Queue
+from stack import (
+    push_algorithm,
+    pop_algorithm,
+    peep_algorithm,
+    isempty_algorithm,
+)
+from queue_ops import (
+    enqueue_algorithm,
+    dequeue_algorithm,
+    peek_algorithm,
+    queis_empty_algorithm,
+)
 
 
 def linear_search(n):
@@ -181,108 +193,26 @@ def queue_bfs_chain(n):
     return order
 
 
-# --- Individual stack operation timing (plain list, module-level state) ---
+# --- Individual stack operation timing ---
+# push/pop_algorithm/peep_algorithm/isempty_algorithm come from stack.py.
 # Isolates each op (push/pop/peek/is_empty) so its own O(1)-per-call
 # behavior is visible: doing n of them should plot as a straight O(n) line.
-
-_raw_stack = []
-
-
-def _raw_push(item):
-    _raw_stack.append(item)
+stack_push = push_algorithm
+stack_pop = pop_algorithm
+stack_peek = peep_algorithm
+stack_is_empty = isempty_algorithm
 
 
-def _raw_pop():
-    return _raw_stack.pop()
-
-
-def _raw_peek():
-    return _raw_stack[-1]
-
-
-def _raw_is_empty():
-    return len(_raw_stack) == 0
-
-
-def stack_push(n):
-    _raw_stack.clear()
-    for i in range(n):
-        _raw_push(i)
-
-
-def stack_pop(n):
-    _raw_stack.clear()
-    for i in range(n):
-        _raw_push(i)
-    for i in range(n):
-        _raw_pop()
-
-
-def stack_peek(n):
-    _raw_stack.clear()
-    for i in range(n):
-        _raw_push(i)
-    for i in range(n):
-        _raw_peek()
-
-
-def stack_is_empty(n):
-    _raw_stack.clear()
-    for i in range(n):
-        _raw_is_empty()
-
-
-# --- Individual queue operation timing (plain list, module-level state) ---
-# Note: dequeue() here uses list.pop(0), which is O(n) per call (it has
+# --- Individual queue operation timing ---
+# enqueue/dequeue/peek/queis_empty_algorithm come from queue_ops.py.
+# Note: dequeue() there uses list.pop(0), which is O(n) per call (it has
 # to shift every remaining element), unlike Stack's pop() from the end.
 # So n dequeues is O(n^2) total, not O(n) — the graph should show a
 # quadratic curve, not a straight line, unlike stack_pop above.
-
-_raw_queue = []
-
-
-def _raw_enqueue(item):
-    _raw_queue.append(item)
-
-
-def _raw_dequeue():
-    return _raw_queue.pop(0)
-
-
-def _raw_peek_queue():
-    return _raw_queue[0]
-
-
-def _raw_queue_is_empty():
-    return len(_raw_queue) == 0
-
-
-def queue_enqueue(n):
-    _raw_queue.clear()
-    for i in range(n):
-        _raw_enqueue(i)
-
-
-def queue_dequeue(n):
-    _raw_queue.clear()
-    for i in range(n):
-        _raw_enqueue(i)
-    for i in range(n):
-        _raw_dequeue()
-
-
-def queue_peek(n):
-    _raw_queue.clear()
-    for i in range(n):
-        _raw_enqueue(i)
-    for i in range(n):
-        _raw_peek_queue()
-
-
-def queue_is_empty(n):
-    _raw_queue.clear()
-    for i in range(n):
-        _raw_queue_is_empty()
+queue_enqueue = enqueue_algorithm
+queue_dequeue = dequeue_algorithm
+queue_peek = peek_algorithm
+queue_is_empty = queis_empty_algorithm
 
 
 ALGORITHMS = {
