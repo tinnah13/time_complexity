@@ -4,6 +4,7 @@ Each function takes a single integer n (input size) and does work
 proportional to that size, using a worst-case input where relevant
 so the measured time reflects the algorithm's real complexity.
 """
+from data_structures import Stack, Queue
 
 
 def linear_search(n):
@@ -96,6 +97,194 @@ def factorial(n):
     return result
 
 
+def deduplicate_users(n):
+    """
+    Naive nested-loop deduplication by id (no set/dict lookup) — the
+    kind of code that often shows up in real API endpoints. Demonstrates
+    O(n^2) behavior since every user is checked against every
+    already-kept unique user.
+    """
+    users = [{"id": i, "name": f"user{i}"} for i in range(n)]
+    unique_users = []
+    for i in range(len(users)):
+        seen = False
+        for j in range(len(unique_users)):
+            if users[i]["id"] == unique_users[j]["id"]:
+                seen = True
+                break
+        if not seen:
+            unique_users.append(users[i])
+    return unique_users
+
+
+# --- Stack/Queue-backed algorithms (Home Activity) ---
+
+def stack_balanced_parentheses(n):
+    """
+    Builds a balanced expression of n '(' followed by n ')' and checks
+    it's balanced using a Stack. O(n) — each character is pushed or
+    popped at most once.
+    """
+    expression = "(" * n + ")" * n
+    stack = Stack()
+    balanced = True
+    for char in expression:
+        if char == "(":
+            stack.push(char)
+        else:
+            if stack.is_empty():
+                balanced = False
+                break
+            stack.pop()
+    return balanced and stack.is_empty()
+
+
+def stack_reverse(n):
+    """
+    Reverses a list of n elements using a Stack (push everything, then
+    pop everything). O(n).
+    """
+    stack = Stack()
+    for item in range(n):
+        stack.push(item)
+    reversed_items = []
+    while not stack.is_empty():
+        reversed_items.append(stack.pop())
+    return reversed_items
+
+
+def queue_bfs_chain(n):
+    """
+    Builds a simple chain graph 0 -> 1 -> 2 -> ... -> n-1 and performs
+    a breadth-first traversal using a Queue. O(n) since each node is
+    enqueued and dequeued exactly once.
+    """
+    if n <= 0:
+        return []
+
+    graph = {i: [i + 1] for i in range(n - 1)}
+    graph[n - 1] = []
+
+    visited = {0}
+    order = []
+    queue = Queue()
+    queue.enqueue(0)
+
+    while not queue.is_empty():
+        node = queue.dequeue()
+        order.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.enqueue(neighbor)
+
+    return order
+
+
+# --- Individual stack operation timing (plain list, module-level state) ---
+# Isolates each op (push/pop/peek/is_empty) so its own O(1)-per-call
+# behavior is visible: doing n of them should plot as a straight O(n) line.
+
+_raw_stack = []
+
+
+def _raw_push(item):
+    _raw_stack.append(item)
+
+
+def _raw_pop():
+    return _raw_stack.pop()
+
+
+def _raw_peek():
+    return _raw_stack[-1]
+
+
+def _raw_is_empty():
+    return len(_raw_stack) == 0
+
+
+def stack_push(n):
+    _raw_stack.clear()
+    for i in range(n):
+        _raw_push(i)
+
+
+def stack_pop(n):
+    _raw_stack.clear()
+    for i in range(n):
+        _raw_push(i)
+    for i in range(n):
+        _raw_pop()
+
+
+def stack_peek(n):
+    _raw_stack.clear()
+    for i in range(n):
+        _raw_push(i)
+    for i in range(n):
+        _raw_peek()
+
+
+def stack_is_empty(n):
+    _raw_stack.clear()
+    for i in range(n):
+        _raw_is_empty()
+
+
+# --- Individual queue operation timing (plain list, module-level state) ---
+# Note: dequeue() here uses list.pop(0), which is O(n) per call (it has
+# to shift every remaining element), unlike Stack's pop() from the end.
+# So n dequeues is O(n^2) total, not O(n) — the graph should show a
+# quadratic curve, not a straight line, unlike stack_pop above.
+
+_raw_queue = []
+
+
+def _raw_enqueue(item):
+    _raw_queue.append(item)
+
+
+def _raw_dequeue():
+    return _raw_queue.pop(0)
+
+
+def _raw_peek_queue():
+    return _raw_queue[0]
+
+
+def _raw_queue_is_empty():
+    return len(_raw_queue) == 0
+
+
+def queue_enqueue(n):
+    _raw_queue.clear()
+    for i in range(n):
+        _raw_enqueue(i)
+
+
+def queue_dequeue(n):
+    _raw_queue.clear()
+    for i in range(n):
+        _raw_enqueue(i)
+    for i in range(n):
+        _raw_dequeue()
+
+
+def queue_peek(n):
+    _raw_queue.clear()
+    for i in range(n):
+        _raw_enqueue(i)
+    for i in range(n):
+        _raw_peek_queue()
+
+
+def queue_is_empty(n):
+    _raw_queue.clear()
+    for i in range(n):
+        _raw_queue_is_empty()
+
+
 ALGORITHMS = {
     "linear_search": linear_search,
     "binary_search": binary_search,
@@ -104,4 +293,16 @@ ALGORITHMS = {
     "insertion_sort": insertion_sort,
     "merge_sort": merge_sort,
     "factorial": factorial,
+    "deduplicate_users": deduplicate_users,
+    "stack_balanced_parentheses": stack_balanced_parentheses,
+    "stack_reverse": stack_reverse,
+    "queue_bfs_chain": queue_bfs_chain,
+    "stack_push": stack_push,
+    "stack_pop": stack_pop,
+    "stack_peek": stack_peek,
+    "stack_is_empty": stack_is_empty,
+    "queue_enqueue": queue_enqueue,
+    "queue_dequeue": queue_dequeue,
+    "queue_peek": queue_peek,
+    "queue_is_empty": queue_is_empty,
 }
