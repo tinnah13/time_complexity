@@ -36,10 +36,10 @@ http://localhost:8000/analyze?algo=linear_search&step=10&n_max=1000
 - `binary_search`
 - `bubble_sort`
 - `nested_loops`
-- `insertion_sort` (bonus)
-- `merge_sort` (bonus)
-- `factorial` (bonus)
-- `deduplicate_users` (bonus)
+- `insertion_sort` 
+- `merge_sort` 
+- `factorial` 
+- `deduplicate_users` 
 
 ### Response
 
@@ -82,7 +82,7 @@ more clearly. `linear_search` and `binary_search` stay comparatively
 flat and can show minor timing noise (small spikes) at microsecond
 scale — that's normal system jitter, not a bug.
 
-### Testing the bonus algorithms
+### Testing the algorithms
 
 ```
 http://localhost:8000/analyze?algo=insertion_sort&step=10&n_max=1000
@@ -97,7 +97,7 @@ http://localhost:8000/analyze?algo=factorial&step=100&n_max=10000
 - `factorial` is O(n) (a single loop multiplying up to n), similar in
   shape to `linear_search`. A larger `n_max` (e.g. 10000) makes the
   trend easier to see since each iteration is cheap.
-- `deduplicate_users` (bonus) — a naive nested-loop dedup-by-id check
+- `deduplicate_users`  — a naive nested-loop dedup-by-id check
   (no set/dict lookup), the kind of code that shows up in real API
   endpoints. O(n²), same shape as `bubble_sort`.
 
