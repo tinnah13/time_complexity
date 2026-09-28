@@ -1,8 +1,8 @@
 from flask import Flask, request
 import base64
 import json
-from algorithm import time_complexity_visualizer
-from algorithm import linear_search, bubble_sort, binary_search, nested_loop, two_pointer, unique_users
+from algorithms import time_complexity_visualizer
+from algorithms import linear_search, bubble_sort, binary_search, nested_loop, two_pointer, unique_users
 from stk import stack, push, pop, peep, is_empty
 from stk import push_algorithm, pop_algorithm, peep_algorithm, isempty_algorithm
 from que import queue, enqueue, dequeue, peek, queis_empty
